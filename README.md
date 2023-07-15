@@ -112,6 +112,7 @@ ALTER TABLE health_db.source_table RENAME TO health_db.target
 ## Optimize Table
 ```
 OPTIMIZE health_db.source_table
+OPTIMIZE health_db.source_table ZORDER BY record_id;
 ```
 ## Describe Command
 
