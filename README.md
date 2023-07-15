@@ -40,10 +40,15 @@ dbSchema = dbutils.widgets.get("db_schema")
 ```sql
 CREATE WIDGET TEXT DATABASE_NAME DEFAULT "health_db";
 
-DROP DATABASE IF EXISTS $DATABASE_NAME CASCADE;
 
 CREATE DATABASE IF NOT EXISTS $DATABASE_NAME LOCATION "abfss://adlaxyx.xyz.net/xyz/xyz";
 ```
+
+## Drop Database Command
+```sql
+DROP DATABASE IF EXISTS $DATABASE_NAME CASCADE;
+```
+
 ## Create Tables Command
 
 ### Delta Table 
@@ -76,6 +81,27 @@ message      	STRING
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' 
 LOCATION "abfss://adlaxyx.xyz.net/health/app/health_logs/*/*/*";
+```
+
+### Create Table From Other Env
+
+```sql
+Create or replace table ###target-table###
+DEEP CLONE ###source-table####
+LOCATION abfss://cntnr@strg.dfs.core.windows.net/env-folder/###target-table###
+```
+### Refresh Table
+
+```
+REFRESH TABLE db_schema.table_name
+```
+
+## Create-View
+
+```
+val viewQry="""CREATE OR REPLACE TEMPORARY VIEW """+viewName + """ USING org.apache.spark.sql.parquet OPTIONS (path '""" +_viewpath + """')"""
+or
+CREATE OR REPLACE TEMPORARY VIEW VIEWNAME USING org.apache.spark.sql.parquet OPTIONS (path '""" +_viewpath + """')
 ```
 
 ## Rename Table
